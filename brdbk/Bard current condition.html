@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Condition of Umm al-Ghulam Mosque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            background-color: #f3dfb9;
+            position: relative;
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+        .fade-in {
+            animation: fadeIn 1.2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { transform: translateY(20px); }
+            100% { transform: translateY(0); }
+        }
+        .gallery {
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .gallery-image {
+            width: 220px;
+            height: 175px;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        .gallery-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        .gallery-image.enlarged {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            width: 80vw;
+            height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close:hover {
+            color: #A88C5A;
+        }
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 6px solid #8B6F47;
+            border-top: 6px solid #A88C5A;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            z-index: 1001;
+            display: none;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(0, 0, 0);
+            z-index: 999;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+        nav.scrolled {
+            background-color: rgb(139, 111, 71);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul li a {
+            color: #000000;
+            font-size: 27px;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 2px;
+        }
+        nav ul li a.nav-bold {
+            font-size: 25px;
+            font-weight: bold;
+        }
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e5c997;
+        }
+        nav ul li a:hover {
+            color: #A88C5A;
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f3dfb9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: all 0.5s ease;
+        }
+        .loader.hidden {
+            display: none;
+        }
+        .spinner {
+            border: 8px solid #8B6F47;
+            border-top: 8px solid #A88C5A;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+            .gallery-image {
+                width: 100%;
+                max-width: 175px;
+            }
+            .content-container {
+                flex-direction: column;
+            }
+            .info-box-container {
+                width: 100%;
+            }
+            .gallery-container {
+                width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .gallery {
+                flex-direction: column;
+            }
+        }
+        .info-box-container {
+            flex: 1;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            text-align: left;
+        }
+        .info-box-container h3 {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .info-box-container ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .content-container {
+            display: flex;
+            gap: 2rem;
+        }
+        .gallery-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .header-date {
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.createElement('div');
+            loader.className = 'loader';
+            loader.innerHTML = '<div class="spinner"></div>';
+            document.body.appendChild(loader);
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                document.body.style.display = 'block';
+            }, 1500);
+
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setTimeout(() => {
+                        window.location = e.target.href;
+                    }, 500);
+                });
+            });
+
+            const images = document.querySelectorAll('.gallery-image');
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <span class="close">×</span>
+                <img class="modal-content" id="modalImage">
+            `;
+            document.body.appendChild(modal);
+            const modalImage = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.close');
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            document.body.appendChild(overlay);
+            const loadingSpinner = document.createElement('div');
+            loadingSpinner.className = 'loading-spinner';
+            document.body.appendChild(loadingSpinner);
+
+            images.forEach(image => {
+                image.addEventListener('click', () => {
+                    if (image.classList.contains('enlarged')) {
+                        image.classList.remove('enlarged');
+                        overlay.style.display = 'none';
+                        modal.classList.remove('show');
+                    } else {
+                        images.forEach(img => img.classList.remove('enlarged'));
+                        loadingSpinner.style.display = 'block';
+                        overlay.style.display = 'block';
+                        modal.classList.add('show');
+                        modalImage.src = image.src;
+                        setTimeout(() => {
+                            loadingSpinner.style.display = 'none';
+                            image.classList.add('enlarged');
+                        }, 500);
+                    }
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('show');
+                images.forEach(img => img.classList.remove('enlarged'));
+                overlay.style.display = 'none';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                    images.forEach(img => img.classList.remove('enlarged'));
+                    overlay.style.display = 'none';
+                }
+            });
+
+            overlay.addEventListener('click', () => {
+                images.forEach(img => img.classList.remove('enlarged'));
+                overlay.style.display = 'none';
+                modal.classList.remove('show');
+            });
+
+            document.querySelector('nav a[href="overview.html"]').classList.add('active');
+        });
+    </script>
+</head>
+<body style="display: none;">
+    <nav class="bg-[#8B6F47] text-white p-4">
+        <ul class="flex justify-center space-x-8 items-center">
+            <li><a href="overview.html" class="nav-bold active">Overview</a></li>
+            <li><a href="about.html" class="nav-bold">About</a></li>
+        </ul>
+    </nav>
+    <section class="py-12 px-6 min-h-screen">
+        <h2 class="text-center mb-8 text-3xl font-extrabold sm:text-4xl md:text-5xl fade-in">
+            Current Condition of Umm al-Ghulam Mosque <span class="header-date">17/5/2025</span>
+        </h2>
+        <div class="gallery max-w-6xl mx-auto">
+            <div class="content-container">
+                <div class="info-box-container fade-in">
+                    <h3>Structural Condition</h3>
+                    <ul>
+                        <li>Field studies have indicated that Umm al-Ghulam Mosque suffers from severe structural issues that may lead to partial collapse, particularly in the front facade.</li>
+                        <li>The most prominent manifestation of this deterioration is the appearance of a large diagonal crack in the main facade, resulting from excessive vertical and lateral loads caused by the massive weight of the minaret, in addition to continuous vibrations from vehicles passing near the mosque due to the narrow street.</li>
+                        <li>Periodic monitoring has shown that this crack is gradually widening over time, increasing the likelihood of the wall losing its structural function.</li>
+                        <li>The mosque has been closed for approximately twenty years, rendering it unable to fulfill its religious or social roles, which has exacerbated neglect and the overall deterioration of its condition.</li>
+                    </ul>
+                    <h3>Other Forms of Deterioration</h3>
+                    <ul>
+                        <li><strong>Human-induced damage</strong>: This includes engravings and writings on the facade stones, defacement of stone surfaces, and a lack of community awareness among nearby residents regarding the preservation of the monument.</li>
+                        <li><strong>Color changes</strong>: The spread of black stains on the outer layer of the stones due to urban pollution and environmental factors.</li>
+                        <li><strong>Moisture and salts</strong>: Moisture has led to a weakening of the mechanical properties of the stones, with signs of salt efflorescence and scaling, contributing to the disintegration of some stone courses. This efflorescence is attributed to the interaction of salts with moisture, which increases internal pressure within the stones.</li>
+                        <li><strong>Lack of regular maintenance</strong>: This has resulted in increased deterioration rates, accumulation of dust and pollutants, and general neglect from an archaeological perspective.</li>
+                        <li><strong>Construction execution issues</strong>: Particularly in the foundation area beneath the minaret, where negligence during construction, such as the failure to use wooden supports under stone elements, has led to direct negative loading on the stones, affecting their mechanical strength over time.</li>
+                    </ul>
+                    <h3>Conclusion</h3>
+                    <ul>
+                        <li>The current condition of Umm al-Ghulam Mosque reflects a complex interplay of severe structural deterioration, exemplified by the main crack in the facade, and environmental and human-induced damage that has weakened the mechanical properties of the stones and marred the historical fabric.</li>
+                        <li>This situation underscores the urgent need for rapid intervention through restoration and structural reinforcement to preserve the building, prevent the collapse of its parts, and safeguard its archaeological value.</li>
+                    </ul>
+                </div>
+                <div class="gallery-container">
+                    <img src="/images/brd bak/current condtion  brd/1.jpg" alt="Image 1" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/2.jpg" alt="Image 2" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/3.jpg" alt="Image 3" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/4.jpg" alt="Image 4" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/5.jpg" alt="Image 5" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/6.jpg" alt="Image 6" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/7.jpg" alt="Image 7" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/8.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/9.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/10.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/11.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/d1.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/d2.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/d3.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/d4.jpg" alt="Image 8" class="gallery-image fade-in">
+                    <img src="/images/brd bak/current condtion  brd/d5.jpg" alt="Image 8" class="gallery-image fade-in">
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
