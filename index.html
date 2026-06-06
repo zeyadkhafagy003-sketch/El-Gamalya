@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Gamaliya Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #F5F5F5; /* لون كافيه فاتح */
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.style.opacity = 0;
+            setTimeout(() => {
+                document.body.style.transition = "opacity 0.5s ease-in";
+                document.body.style.opacity = 1;
+            }, 100);
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.style.opacity = 0;
+                    setTimeout(() => {
+                        window.location = e.target.href;
+                    }, 500);
+                });
+            });
+        });
+    </script>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-[#8B6F47] text-white p-4">
+        <ul class="flex justify-center space-x-8">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="team.html" class="hover:underline">Team</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <section class="relative h-screen flex items-center justify-center">
+        <img src="./images/home/cover project.jpg" alt="Background" class="absolute inset-0 w-full h-full object-cover">
+        <div class="text-center z-10">
+            <h1 class="text-6xl font-bold text-[#000000] fade-in drop-shadow-lg">Registration, Documentation, and Proposed Rehabilitation of the Mosque of Umm al-Ghulam and the Sabil of Ismail Mughluy, One of the Buildings in the Al-Gamaleya District</h1>
+            <a href="extra.html" class="mt-8 inline-block bg-black text-white py-2 px-4 rounded hover:bg-gray-900 hover-scale">Press Here</a>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Al-Gamaliya Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3dfb9; /* لون كافيه فاتح */
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .link-icon {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .hover-scale:hover .link-icon {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.style.opacity = 0;
+            setTimeout(() => {
+                document.body.style.transition = "opacity 0.5s ease-in";
+                document.body.style.opacity = 1;
+            }, 100);
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.style.opacity = 0;
+                    setTimeout(() => {
+                        window.location = e.target.href;
+                    }, 500);
+                });
+            });
+        });
+    </script>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-[#8B6F47] text-white p-4">
+        <ul class="flex justify-center space-x-8">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="team.html" class="hover:underline">Team</a></li>
+        </ul>
+    </nav>
+
+    <!-- About Page -->
+    <section class="py-16 px-4 min-h-screen flex flex-col items-center">
+        <h2 class="text-4xl font-bold text-center text-[#4A3C31] mb-12">About Al-Gamaliya</h2>
+        <div class="flex justify-center items-center gap-20 max-w-7xl mx-auto flex-col sm:flex-row">
+            <a href="/sabilsomaa/sabil.html" class="text-center hover-scale bg-white rounded-lg p-4 shadow-md relative w-256 h-256">
+                <img src="./images/about/sabil.jpg" alt="Sabil Ismail Maghlawi" class="w-full h-full object-cover rounded-lg fade-in aspect-square">
+                <div class="link-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#4A3C31] text-[#F5F5F5] p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                </div>
+                <p class="mt-4 text-xl font-semibold text-[#4A3C31]">Sabil Ismail Maghlawi</p>
+            </a>
+            <a href="/brdbk/mosque.html" class="text-center hover-scale bg-white rounded-lg p-4 shadow-md relative w-256 h-256">
+                <img src="./images/about/brd.jpg" alt="Mosque of Ibn Barad Bak" class="w-full h-full object-cover rounded-lg fade-in aspect-square">
+                <div class="link-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#4A3C31] text-[#F5F5F5] p-3 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                </div>
+                <p class="mt-4 text-xl font-semibold text-[#4A3C31]">Mosque of Ibn Barad Bak</p>
+            </a>
+        </div>
+    </section>
+</body>
+</html>

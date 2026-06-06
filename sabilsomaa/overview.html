@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabil Ismail Maghlawi - Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/images/home/cover\ project.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #F5F5F5;
+            position: relative;
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
+        }
+        /* Removed body::before to eliminate transparency */
+        .fade-in {
+            animation: fadeIn 1.2s ease-in;
+        }
+        @keyframes fadeIn {
+            0% { transform: translateY(20px); } /* Removed opacity from animation */
+            100% { transform: translateY(0); }
+        }
+        .subtitle-box {
+            background-color: #e0c195;
+            color: #000000;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 26px;
+            text-align: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            transform: scale(1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .subtitle-box:hover {
+            background-color: #A88C5A;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .subtitle-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+        nav.scrolled {
+            background-color: #8B6F47; /* Removed transparency from nav */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul li a {
+            color: #000000;
+            font-size: 25px;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 2px;
+        }
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #A88C5A;
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #F5F5F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            border: 8px solid #8B6F47;
+            border-top: 8px solid #A88C5A;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.createElement('div');
+            loader.className = 'loader';
+            loader.innerHTML = '<div class="spinner"></div>';
+            document.body.appendChild(loader);
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                /* Removed body opacity transitions */
+            }, 1500);
+
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    /* Removed body opacity transition on link click */
+                    window.location = e.target.href;
+                });
+            });
+
+            // Add active class to Overview link
+            document.querySelector('nav a[href="overview.html"]').classList.add('active');
+        });
+    </script>
+</head>
+<body class="font-sans">
+    <nav class="bg-[#8B6F47] text-white p-4">
+        <ul class="flex justify-center space-x-8">
+            <li><a href="overview.html" class="hover active">Overview</a></li>
+             <li><a href="about.html" class="hover active">about</a></li>
+        </ul>
+    </nav>
+    <section class="py-12 px-6 min-h-screen flex flex-col justify-center">
+        <div class="subtitle-column mb-4 mt-12">
+            <a href="/sabilsomaa/sabil current condition.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">current condition</h3>
+            </a>
+            <a href="/sabilsomaa/sabil photography.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">Photography</h3>
+            </a>
+            <a href="/sabilsomaa/sabil photogrammetry.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">Photogrammetry</h3>
+            </a>
+            <a href="/sabilsomaa/sabil documentation.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">Documentation and Registration</h3>
+            </a>
+            <a href="/sabilsomaa/sabil restoration.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">Restoration</h3>
+            </a>
+            <a href="/sabilsomaa/sabil rehabilitation.html" class="subtitle-box fade-in">
+                <h3 class="font-bold">Rehabilitation</h3>
+            </a>
+        </div>
+    </section>
+</body>
+</html>
